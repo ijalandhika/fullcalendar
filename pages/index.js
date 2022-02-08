@@ -1,14 +1,21 @@
 import FullCalendar from "@fullcalendar/react";
-import Tooltip from "tooltip.js"
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { useRef } from "react";
+import tippy from 'tippy.js';
 
 const Calendar = () => {
   const calendarRef = useRef(null);
   return (
     <div>
+      <div id="template" style={{ display: 'none'}}>
+        <div style={{ backgroundColor: '#CCE4F5'}}>
+          <h3>Information</h3>
+          <hr />
+          <p>You have appointments between 11am-2pm in another facility</p>
+        </div>
+      </div>
       <FullCalendar
         innerRef={calendarRef}
         plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]}
@@ -18,11 +25,12 @@ const Calendar = () => {
         initialDate='2021-11-12' 
         initialView='dayGridMonth'
         eventDidMount={(info) => {
-          var tooltip = new Tooltip(info.el, {
-            title: info.event.extendedProps.description,
-            placement: 'top',
-            trigger: 'hover',
-            container: 'body'
+          console.log(info);
+          tippy(info.el, {
+            content: template.innerHTML,
+            allowHTML: true,
+            trigger: "click",
+            theme: "light"
           });
         }}
         events={[
